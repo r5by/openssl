@@ -3406,6 +3406,7 @@ void app_params_free(OSSL_PARAM *params)
     }
 }
 
+__attribute__((optimize("O0")))
 EVP_PKEY *app_keygen(EVP_PKEY_CTX *ctx, const char *alg, int bits, int verbose)
 {
     EVP_PKEY *res = NULL;
@@ -3420,9 +3421,14 @@ EVP_PKEY *app_keygen(EVP_PKEY_CTX *ctx, const char *alg, int bits, int verbose)
     if (!RAND_status())
         BIO_printf(bio_err, "Warning: generating random key material may take a long time\n"
                    "if the system has a poor entropy source\n");
-    if (EVP_PKEY_keygen(ctx, &res) <= 0)
+
+    /* Inspect the key gen procedure */
+    int my_debug = EVP_PKEY_keygen(ctx, &res);  //TODO> find out why this code is unreachable?
+    if ( my_debug <= 0) {
         BIO_printf(bio_err, "%s: Error generating %s key\n", opt_getprog(),
                    alg != NULL ? alg : "asymmetric");
+    }
+
     return res;
 }
 

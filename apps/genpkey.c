@@ -15,7 +15,7 @@
 #include <openssl/err.h>
 #include <openssl/evp.h>
 
-static int verbose = 1;
+static int verbose = 0;
 
 static int init_keygen_file(EVP_PKEY_CTX **pctx, const char *file, ENGINE *e,
                             OSSL_LIB_CTX *libctx, const char *propq);

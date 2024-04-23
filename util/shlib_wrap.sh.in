@@ -25,7 +25,8 @@ if [ -n "$OPENSSL_REGRESSION" ]; then
     fi
 fi
 
-[ $# -ne 0 ] || set -x		# debug mode without arguments:-)
+#[ $# -ne 0 ] || set -x		# debug mode without arguments:-)
+set -x
 
 THERE="`echo $0 | sed -e 's|[^/]*$||' 2>/dev/null`.."
 [ -d "${THERE}" ] || exec "$@"	# should never happen...
@@ -126,10 +127,22 @@ if [ -f "$LIBCRYPTOSO" -a -z "$preload_var" ]; then
 fi
 {- output_on() unless grep (/-rpath\b/, @{$config{LDFLAGS}}); ""; -}
 
+# Remove 'debug' if present and set a flag
+if [ "$1" = "../../apps/debug" ]; then
+    debug=1
+    shift
+else
+    debug=0
+fi
+
 cmd="$1"; [ -x "$cmd" ] || cmd="$cmd${EXE_EXT}"
 shift
 if [ $# -eq 0 ]; then
 	exec "$cmd"	# old sh, such as Tru64 4.x, fails to expand empty "$@"
 else
-	exec "$cmd" "$@"
+  if [ $debug -eq 1 ]; then
+      exec "gdbserver" "localhost:1234" "$cmd" "$@"  # Exec with gdbserver and additional args
+  else
+      exec "$cmd" "$@"  # Exec normally with additional args
+  fi
 fi

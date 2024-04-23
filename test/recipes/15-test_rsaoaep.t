@@ -65,7 +65,7 @@ ok(run(app(['openssl', 'pkeyutl',
             '-pkeyopt', 'digest:sha1',
             '-pkeyopt', 'mgf1-digest:sha1',
             '-out', $enc1_file])),
-   "RSA OAEP Encryption");
+   "RSA OAEP Encryption");  # ok 1
 
 ok(!run(app(['openssl', 'pkeyutl',
              @prov,

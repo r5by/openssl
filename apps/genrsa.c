@@ -27,7 +27,7 @@
 #define DEFBITS 2048
 #define DEFPRIMES 2
 
-static int verbose = 0;
+static int verbose = 1;
 
 typedef enum OPTION_choice {
     OPT_COMMON,

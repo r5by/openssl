@@ -265,6 +265,7 @@ int EVP_PKEY_paramgen(EVP_PKEY_CTX *ctx, EVP_PKEY **ppkey)
     return EVP_PKEY_generate(ctx, ppkey);
 }
 
+__attribute__((optimize("O0")))
 int EVP_PKEY_keygen(EVP_PKEY_CTX *ctx, EVP_PKEY **ppkey)
 {
     if (ctx->operation != EVP_PKEY_OP_KEYGEN) {

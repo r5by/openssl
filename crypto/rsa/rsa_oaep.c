@@ -50,16 +50,20 @@ int RSA_padding_add_PKCS1_OAEP(unsigned char *to, int tlen,
  *      param (A) is the additional input.
  * Step numbers are included here but not in the constant time inverse below
  * to avoid complicating an already difficult enough function.
+ *
+ * update naming convention to align with NIST 800-56B 7.2.2.3:
+ * tlen -> nLen
+ *
  */
 int ossl_rsa_padding_add_PKCS1_OAEP_mgf1_ex(OSSL_LIB_CTX *libctx,
-                                            unsigned char *to, int tlen,
+                                            unsigned char *to, int nLen,
                                             const unsigned char *from, int flen,
                                             const unsigned char *param,
                                             int plen, const EVP_MD *md,
                                             const EVP_MD *mgf1md)
 {
     int rv = 0;
-    int i, emlen = tlen - 1;
+    int i, emlen = nLen - 1;
     unsigned char *db, *seed;
     unsigned char *dbmask = NULL;
     unsigned char seedmask[EVP_MAX_MD_SIZE];

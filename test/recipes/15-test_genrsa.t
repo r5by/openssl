@@ -31,9 +31,9 @@ plan tests =>
 is(run(app([ 'openssl', 'genpkey', '-out', 'genrsatest.pem',
              '-algorithm', 'RSA', '-pkeyopt', 'rsa_keygen_bits:8',
              '-pkeyopt', 'rsa_keygen_pubexp:3'])),
-           0, "genpkey 8");
+           0, "genpkey 8");  # ok 1
 is(run(app([ 'openssl', 'genrsa', '-3', '-out', 'genrsatest.pem', '8'])),
-           0, "genrsa -3 8");
+           0, "genrsa -3 8");  # ok 2
 
 # Depending on the shared library, we might have different lower limits.
 # Let's find it!  This is a simple binary search
@@ -63,11 +63,16 @@ $good++ if $good == $bad;
 $good = 2 ** $good;
 note "Found lowest allowed amount of bits to be $good";
 
-ok(run(app([ 'openssl', 'genpkey', '-algorithm', 'RSA',
-             '-pkeyopt', 'rsa_keygen_pubexp:65537',
-             '-pkeyopt', "rsa_keygen_bits:$good",
-             '-out', 'genrsatest.pem' ])),
-   "genpkey $good");
+# ok(run(app(['debug', '../../apps/openssl', 'genpkey', '-algorithm', 'RSA',
+#     '-pkeyopt', 'rsa_keygen_pubexp:65537',
+#     '-pkeyopt', "rsa_keygen_bits:$good",
+#     '-out', 'genrsatest.pem' ])),
+#     "genpkey $good");  # ok 3 -- debug
+ok(run(app(['openssl', 'genpkey', '-algorithm', 'RSA',
+    '-pkeyopt', 'rsa_keygen_pubexp:65537',
+    '-pkeyopt', "rsa_keygen_bits:$good",
+    '-out', 'genrsatest.pem' ])),
+    "genpkey $good");  # ok 3
 ok(run(app([ 'openssl', 'pkey', '-check', '-in', 'genrsatest.pem', '-noout' ])),
    "pkey -check");
 

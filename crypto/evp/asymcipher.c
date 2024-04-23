@@ -244,7 +244,7 @@ int EVP_PKEY_encrypt(EVP_PKEY_CTX *ctx,
         goto legacy;
 
     ret = ctx->op.ciph.cipher->encrypt(ctx->op.ciph.algctx, out, outlen,
-                                       (out == NULL ? 0 : *outlen), in, inlen);
+                                       (out == NULL ? 0 : *outlen), in, inlen); //Call rsa_enc.c: rsa_encrypt()
     return ret;
 
  legacy:

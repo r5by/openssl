@@ -471,7 +471,7 @@ int pkeyutl_main(int argc, char **argv)
         if (kdflen != 0) {
             buf_outlen = kdflen;
             rv = 1;
-        } else {
+        } else {// RSA enc...
             rv = do_keyop(ctx, pkey_op, NULL, (size_t *)&buf_outlen,
                           buf_in, (size_t)buf_inlen);
         }
@@ -479,7 +479,7 @@ int pkeyutl_main(int argc, char **argv)
             buf_out = app_malloc(buf_outlen, "buffer output");
             rv = do_keyop(ctx, pkey_op,
                           buf_out, (size_t *)&buf_outlen,
-                          buf_in, (size_t)buf_inlen);
+                          buf_in, (size_t)buf_inlen);  // !!NOTE: Actually call to do key operation (EVP rsa encode) !!
         }
     }
     if (rv <= 0) {
